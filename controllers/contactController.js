@@ -32,11 +32,12 @@ const createContact = asyncHandler(async(req, res) => {
         throw new Error("All fields are mandatory!!");
     }
     const contact = await Contact.create({
+        user_id: req.user.id,
         name,
         email,
         phone,
-        user_id: req.user.id,
     });
+    console.log( "CONTACT------------->" ,contact)
     res.status(201).json(contact);
 });
 
@@ -76,8 +77,8 @@ const deleteContact = asyncHandler(async(req, res) => {
         res.status(403);
         throw new Error("Not authorized to delete this contact!!");
     }
-    await Contact.findByIdAndDelete(req.params.id);
-    res.status(201).json({ message: `Delete contact for ${req.params.id}`});
+    await Contact.deleteOne({ _id: req.params.id });
+    res.status(200).json(contact);
 });
 
 
